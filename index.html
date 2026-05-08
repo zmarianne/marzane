@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marianne Zanettin — IA et conception numérique</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cobalt: #0047AB;
+      --lime: #8EBA43;
+      --sunflower: #F5E356;
+      --fandango: #B53389;
+      --creme: #f8f7f2;
+      --cobalt-dark: #003490;
+      --text-on-cobalt: #f8f7f2;
+      --text-on-creme: #1a1a2e;
+      --bandeau-width: 80px;
+      --bandeau-width-mobile: 100%;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 400;
+      background: var(--creme);
+      color: var(--text-on-creme);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── LAYOUT GÉNÉRAL ── */
+    .page-wrapper {
+      display: flex;
+      flex-direction: row;
+      min-height: 100vh;
+    }
+
+    /* ── BANDEAU LATÉRAL ── */
+    .bandeau {
+      width: var(--bandeau-width);
+      min-width: var(--bandeau-width);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+
+    .bandeau img {
+      width: 100%;
+      height: auto;
+      display: block;
+      /* répétition verticale */
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .bandeau-inner {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+      background-image: url('images/bandeau.png');
+      background-size: 80px auto;
+      background-repeat: repeat-y;
+    }
+
+    /* ── CONTENU PRINCIPAL ── */
+    .main-content {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 5rem 4rem;
+      position: relative;
+    }
+
+    section.creme { background: var(--creme); color: var(--text-on-creme); }
+    section.cobalt { background: var(--cobalt); color: var(--text-on-cobalt); }
+
+    /* ── TITRES DE SECTION ── */
+    .section-label {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      opacity: 0.7;
+    }
+
+    h2.section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 2.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Accent coloré sous le titre */
+    h2.section-title::after {
+      content: '';
+      display: block;
+      height: 4px;
+      width: 60px;
+      margin-top: 0.6rem;
+      border-radius: 2px;
+    }
+
+    section.creme h2.section-title::after { background: var(--fandango); }
+    section.cobalt h2.section-title::after { background: var(--sunflower); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 4rem 4rem 4rem 4rem;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4rem;
+      align-items: center;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .hero-text h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: 1rem;
+      color: var(--text-on-creme);
+    }
+
+    .hero-firstname {
+      font-style: normal;
+      color: var(--text-on-creme);
+      font-size: 0.85em;
+    }
+    .hero-lastname {
+      font-style: italic;
+      color: var(--cobalt);
+      font-size: 1.05em;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      font-weight: 400;
+      color: var(--cobalt);
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-desc {
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+
+    .hero-location {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .hero-location::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--fandango);
+      flex-shrink: 0;
+    }
+
+    /* Photo hero */
+    .hero-photo-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .hero-photo-frame {
+      width: 220px;
+      height: 280px;
+      position: relative;
+    }
+
+    .hero-photo-frame::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 100%;
+      height: 100%;
+      background: var(--fandango);
+      z-index: 0;
+      border-radius: 2px;
+    }
+
+    .hero-photo-frame::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      width: 60%;
+      height: 60%;
+      background: var(--sunflower);
+      z-index: 0;
+      border-radius: 2px;
+    }
+
+    .hero-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      position: relative;
+      z-index: 1;
+      border-radius: 2px;
+    }
+
+    /* ── SECTION QUI SUIS-JE ── */
+    .qui-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 1rem;
+    }
+
+    .qui-block h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      color: var(--sunflower);
+    }
+
+    .qui-block p {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .qui-block strong {
+      font-weight: 600;
+      color: var(--sunflower);
+    }
+
+    .qui-block a {
+      color: var(--sunflower);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .qui-highlight {
+      grid-column: 1 / -1;
+      border-left: 4px solid var(--sunflower);
+      padding-left: 1.5rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      font-style: italic;
+    }
+
+    /* ── CARTES SPÉCIALITÉS & PROJETS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      background: var(--creme);
+      color: var(--text-on-creme);
+      border-radius: 4px;
+      padding: 2rem 1.75rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      border-top: 4px solid transparent;
+    }
+
+    .card:nth-child(1) { border-top-color: var(--fandango); }
+    .card:nth-child(2) { border-top-color: var(--lime); }
+    .card:nth-child(3) { border-top-color: var(--sunflower); }
+    .card:nth-child(4) { border-top-color: var(--cobalt); }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+    }
+
+    .card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--text-on-creme);
+    }
+
+    .card .card-accroche {
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 1.2rem;
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--cobalt);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 0;
+      font-family: inherit;
+      transition: gap 0.2s;
+    }
+
+    .card-cta:hover { gap: 0.7rem; }
+
+    /* Cartes projets sur fond cobalt */
+    section.cobalt .card {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-on-cobalt);
+      border-top-color: var(--sunflower);
+    }
+
+    section.cobalt .card:nth-child(1) { border-top-color: var(--sunflower); }
+    section.cobalt .card:nth-child(2) { border-top-color: var(--lime); }
+    section.cobalt .card:nth-child(3) { border-top-color: var(--fandango); }
+
+    section.cobalt .card h3 { color: var(--creme); }
+    section.cobalt .card .card-accroche { color: rgba(248,247,242,0.75); }
+    section.cobalt .card-cta { color: var(--sunflower); }
+
+    section.cobalt .card:hover {
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 60, 0.75);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      background: var(--creme);
+      color: var(--text-on-creme);
+      border-radius: 4px;
+      max-width: 680px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 3rem;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.25s ease;
+      border-top: 6px solid var(--fandango);
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: translateY(0);
+    }
+
+    .modal-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-box .modal-accroche {
+      font-style: italic;
+      color: #666;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      line-height: 1.6;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 1.25rem;
+    }
+
+    .modal-body {
+      font-size: 0.97rem;
+      line-height: 1.85;
+      font-weight: 400;
+    }
+
+
+    .modal-img {
+      width: 100%;
+      border-radius: 4px;
+      margin: 1.25rem 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    .modal-img-mobile {
+      max-width: 260px;
+      display: block;
+      margin: 1.25rem auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    .modal-imgs-row {
+      display: flex;
+      gap: 1rem;
+      margin: 1.25rem 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .modal-imgs-row .modal-img-mobile {
+      margin: 0;
+      max-width: 180px;
+    }
+
+    .modal-body p { margin-bottom: 1rem; }
+    .modal-body ul, .modal-body ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+    .modal-body li { margin-bottom: 0.4rem; }
+    .modal-body strong { font-weight: 600; }
+    .modal-body a { color: var(--cobalt); text-underline-offset: 3px; }
+
+    .modal-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #888;
+      line-height: 1;
+      padding: 0.25rem;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--fandango); }
+
+    /* ── CONTACT ── */
+    #contact {
+      min-height: 40vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-inner {
+      max-width: 560px;
+    }
+
+    .contact-intro {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      font-style: italic;
+      color: rgba(248,247,242,0.85);
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--sunflower);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 400;
+      transition: gap 0.2s;
+    }
+
+    .contact-link:hover { gap: 1.1rem; }
+
+    .contact-link svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* ── NAV FLOTTANTE ── */
+    nav.floatnav {
+      position: fixed;
+      top: 50%;
+      right: 1.5rem;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      z-index: 200;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cobalt);
+      opacity: 0.3;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      border: none;
+      padding: 0;
+    }
+
+    .nav-dot.active, .nav-dot:hover {
+      opacity: 1;
+      transform: scale(1.4);
+    }
+
+    /* ── RESPONSIVE MOBILE ── */
+    @media (max-width: 768px) {
+      .page-wrapper { flex-direction: column; }
+
+      .bandeau {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 574 / 70;
+        min-width: unset;
+        position: relative;
+      }
+
+      .bandeau-inner {
+        background-image: url('images/bandeau_mobile.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+      }
+
+      nav.floatnav { display: none; }
+
+      section { padding: 3rem 1.5rem; }
+
+      #hero { min-height: auto; padding: 3rem 1.5rem; }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .hero-photo-wrap { order: -1; display: flex; justify-content: center; }
+      .hero-photo-frame { width: 160px; height: 200px; }
+
+      .qui-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .qui-highlight { grid-column: 1; }
+
+      .cards-grid { grid-template-columns: 1fr; }
+
+      .modal-box { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation flottante -->
+<nav class="floatnav" aria-label="Navigation par sections">
+  <button class="nav-dot active" data-target="hero" title="Accueil"></button>
+  <button class="nav-dot" data-target="qui" title="Qui suis-je"></button>
+  <button class="nav-dot" data-target="specialites" title="Spécialités"></button>
+  <button class="nav-dot" data-target="projets" title="Projets"></button>
+  <button class="nav-dot" data-target="contact" title="Contact"></button>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- Bandeau latéral -->
+  <aside class="bandeau" aria-hidden="true">
+    <div class="bandeau-inner" id="bandeauEl"></div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- ── HERO ── -->
+    <section id="hero" class="creme">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <p class="hero-subtitle">IA et conception numérique<br>pour la rédaction professionnelle</p>
+          <h1><span class="hero-firstname">Marianne</span><br><em class="hero-lastname">Zanettin</em></h1>
+          <p class="hero-desc">Je conçois et teste des applications numériques pour la rédaction professionnelle. J'accompagne les gens de l'écrit à l'utilisation de ces applications.</p>
+          <p class="hero-location">Toulouse, Occitanie</p>
+        </div>
+        <div class="hero-photo-wrap">
+          <div class="hero-photo-frame">
+            <img src="images/portrait.png" alt="Portrait de Marianne Zanettin">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── QUI SUIS-JE ── -->
+    <section id="qui" class="cobalt">
+      <p class="section-label">À propos</p>
+      <h2 class="section-title">D'où je viens,<br>où je vais</h2>
+      <div class="qui-grid">
+        <div class="qui-block">
+          <h3>Mon parcours</h3>
+          <p>Je suis ingénieure de formation et de cœur. J'ai travaillé dans les technologies de l'information, côté IT au début puis dans la rédaction technique et professionnelle — en tant que rédactrice, correctrice, onboardeuse de nouveaux rédacteurs, et prof de communication professionnelle en école d'ingé.</p>
+          <p>Quand l'IA générative est apparue, j'ai été galvanisée. Formée dès début 2023, hackathon, veille continue. <a href="https://www.linkedin.com/in/marianne-zanettin/" target="_blank" rel="noopener">J'ai laissé une trace de ce chemin sur LinkedIn</a>.</p>
+          <p><strong>L'IA générative est désormais au cœur de mon activité : soit parce qu'elle me permet de faire des choses que je ne ferais pas sans, soit parce que j'aide des entreprises à l'insérer intelligemment dans leur process.</strong></p>
+          <p>Je suis à Toulouse et j'aspire à rencontrer des partenaires en Occitanie. À la croisée entre la tech et les métiers de l'écrit, je parle le langage de chacun·e.</p>
+        </div>
+        <div class="qui-block">
+          <h3>Mon intention</h3>
+          <p>Quel kif de vivre cette époque extraordinaire (oui, en dépit de tout le reste). L'ambivalence est bien là au quotidien : se dire écolo et utiliser l'IA ; se dire humaniste et utiliser les outils des GAFAM.</p>
+          <p>Voici comment j'avance : j'essaie de rester sur un chemin d'exploration et de réflexion en même temps que de réalisation.</p>
+          <p><strong>Je suis convaincue qu'avec une bonne boussole on peut utiliser l'IA pour amener la tech vers l'humain et vers le local.</strong></p>
+          <p>On ne va quand même pas laisser l'intégralité du secteur aux mains des tech bros&nbsp;!</p>
+          <p>Je suis une scientifique, mais aussi une rêveuse : avec l'IA en assistante dévouée, j'y vois la géniale possibilité de l'avènement d'un artisanat numérique de proximité — ce que <a href="https://maggieappleton.com/" target="_blank" rel="noopener">Maggie Appleton</a> appelle les <em>home-cooked software by barefoot developers</em>. Un levier au service du bien commun.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SPÉCIALITÉS ── -->
+    <section id="specialites" class="creme">
+      <p class="section-label">Ce que je fais</p>
+      <h2 class="section-title">Mes spécialités</h2>
+      <div class="cards-grid">
+
+        <article class="card" onclick="openModal('conseil')">
+          <h3>Conseil en IA pour la rédaction</h3>
+          <p class="card-accroche">Il existe pléthore de solutions pour rédiger des comptes-rendus, des réponses automatiques ou des contenus marketing. Quand on creuse, c'est rare qu'elles répondent pleinement au besoin.</p>
+          <button class="card-cta" aria-label="En savoir plus sur le conseil en IA">Lire la suite →</button>
+        </article>
+
+        <article class="card" onclick="openModal('redaction')">
+          <h3>Rédaction technique et professionnelle</h3>
+          <p class="card-accroche">La rédaction technique est autant structure et gestion de contenu que rédaction. Concevoir une documentation, c'est réfléchir au format, à la destination, à l'accessibilité et à la maintenance.</p>
+          <button class="card-cta" aria-label="En savoir plus sur la rédaction technique">Lire la suite →</button>
+        </article>
+
+        <article class="card" onclick="openModal('nocode')">
+          <h3>No-code et vibecoding</h3>
+          <p class="card-accroche">No-code (avec ou sans IA) et vibecoding permettent de créer des applications numériques sans investir dans du développement pur.</p>
+          <button class="card-cta" aria-label="En savoir plus sur le no-code">Lire la suite →</button>
+        </article>
+
+        <article class="card" onclick="openModal('accompagnement')">
+          <h3>Accompagnement à l'utilisation de l'IA</h3>
+          <p class="card-accroche">Accompagner les personnes qui commencent à utiliser l'IA, c'est éthique mais aussi malin — pour garder toutes les compétences&nbsp;!</p>
+          <button class="card-cta" aria-label="En savoir plus sur l'accompagnement">Lire la suite →</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ── PROJETS ── -->
+    <section id="projets" class="cobalt">
+      <p class="section-label">Portfolio</p>
+      <h2 class="section-title">Projets réalisés<br>et en cours</h2>
+      <div class="cards-grid">
+
+        <article class="card" onclick="openModal('applis')">
+          <h3>Des applis pédagogiques</h3>
+          <p class="card-accroche">Je construis régulièrement des petites applis de maths pour ma fille — un excellent cas d'usage avec une vraie utilisatrice.</p>
+          <button class="card-cta" aria-label="En savoir plus sur les applis pédagogiques">Lire la suite →</button>
+        </article>
+
+        <article class="card" onclick="openModal('adherents')">
+          <h3>Gestion des adhérents pour une association</h3>
+          <p class="card-accroche">Une appli en no-code permet à une asso de gérer ses adhérents simplement. Quelques heures par trimestre gagnées et beaucoup de frustration évitée.</p>
+          <button class="card-cta" aria-label="En savoir plus sur la gestion des adhérents">Lire la suite →</button>
+        </article>
+
+        <article class="card" onclick="openModal('numerique')">
+          <h3>Numérique responsable</h3>
+          <p class="card-accroche">Je me place dans une démarche d'amélioration continue pour mettre en place et promouvoir une utilisation responsable du numérique.</p>
+          <button class="card-cta" aria-label="En savoir plus sur le numérique responsable">Lire la suite →</button>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ── CONTACT ── -->
+    <section id="contact" class="creme">
+      <p class="section-label">Échangeons !</p>
+      <h2 class="section-title">Contact</h2>
+      <div class="contact-inner">
+        <p class="contact-intro" style="color:#555;">Je n'ai pour l'instant ni offre ni CTA, mais mes messages sont ouverts pour tout échange sur la co-intelligence avec l'IA générative, sur la tech pour les gens, sur le numérique responsable.</p>
+        <div class="contact-links">
+          <a href="mailto:mz@marzane.fr" class="contact-link" style="color:var(--cobalt);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+            mz@marzane.fr
+          </a>
+          <a href="https://www.linkedin.com/in/marianne-zanettin/" target="_blank" rel="noopener" class="contact-link" style="color:var(--cobalt);">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            linkedin.com/in/marianne-zanettin
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ── MODALS ── -->
+<div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="Fermer">✕</button>
+    <h3 id="modal-title"></h3>
+    <p class="modal-accroche" id="modal-accroche"></p>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ── Images en base64 ──
+
+// Injection des images
+
+// ── Contenu des modals ──
+const modals = {
+  conseil: {
+    title: 'Conseil en IA pour la rédaction',
+    accroche: 'Il existe pléthore de solutions pour rédiger des comptes-rendus, des réponses automatiques à des mails ou des contenus marketing. Quand on creuse, c\'est rare qu\'elles répondent pleinement au besoin.',
+    body: `
+      <p>Les questions que je pose avant de préconiser quoi que ce soit :</p>
+      <ul>
+        <li>Est-ce que la création du contenu est vraiment le facteur limitant, ou est-ce qu'il y a d'autres étapes à considérer ? (les process où faut faire des copier-coller à n'en plus finir, merci mais non merci)</li>
+        <li>Où est-ce qu'on garde une patte humaine et où est-ce qu'on peut s'en passer, et dans quelle mesure ? (indice : très rarement à 100 %, donc si tu gagnes 30 %, c'est déjà pas mal)</li>
+        <li>Comment faire pour que mes données ne se retrouvent pas exposées ? (crainte souvent à la fois surestimée et traitée au mauvais endroit)</li>
+        <li>Faut-il vraiment un marteau pilon pour écrire quelques lignes ? (les modèles et les scripts c'est bien aussi)</li>
+      </ul>
+      <p>Ce que je fais pour éclaircir tout ça :</p>
+      <ol>
+        <li>De la veille et des tests d'outils du marché (ou l'art de poser les bonnes questions lors des rdv commerciaux)</li>
+        <li>Décortiquer un process et mettre le doigt sur ce qui peut être facilité, sur ce qui peut être aidé de l'IA et sur ce qui ne doit pas l'être</li>
+        <li>Créer des jeux de données pour entraîner un modèle d'IA générative pour lui montrer comment répondre à ton besoin</li>
+        <li>Régler des prompts au petit poil pour que le modèle respecte au max TOUTES les consignes techniques et métier (à moi l'optimisation de prompts de 2000 mots)</li>
+        <li>Accompagner les personnes qui travaillent avec des contenus générés par IA</li>
+      </ol>
+    `
+  },
+  redaction: {
+    title: 'Rédaction technique et professionnelle',
+    accroche: 'La rédaction technique est autant structure et gestion de contenu que rédaction. Concevoir une documentation, c\'est réfléchir au format, à la destination, à l\'accessibilité et à la maintenance.',
+    body: `
+      <p>Chaque type d'écriture se situe sur un continuum entre le code et la poésie. Je vois la rédaction technique comme l'étape juste après le code : ultra codifiée, ultra structurée, mais avec une place pour la créativité humaine dans l'adaptation fine entre l'utilisateur, les conditions de lecture et l'angle choisi.</p>
+      <p>La rédaction professionnelle est au cran suivant : elle doit être codifiée et structurée mais on a un peu plus de souplesse, notamment dans les introductions et les conclusions, pour élargir la focale.</p>
+      <p>Dans tous les cas, il faut le respect absolu du contrat. En rédaction technique c'est : <em>je te lis si tu m'aides à faire</em>. En rédaction professionnelle c'est : <em>je te lis si tu m'aides à trouver rapidement l'information qui m'intéresse</em>.</p>
+      <p>À partir de là, la rédaction tient plus du jeu de Lego que de l'écriture au sens littéraire : penser à l'utilisateur, poser la structure, rédiger (quand même), illustrer, mettre en page, vérifier.</p>
+      <p>L'IA n'a pas encore la main sur toutes ces composantes. Et surtout, pour bien la piloter, il ne faut pas se tromper d'endroit : rédiger brillamment un contenu qui ne s'adresse à personne n'a par exemple aucun intérêt (ça semble évident, et pourtant !).</p>
+    `
+  },
+  nocode: {
+    title: 'No-code et vibecoding',
+    accroche: 'No-code (avec ou sans IA) et vibecoding permettent de créer des applications numériques sans investir dans du développement pur.',
+    body: `
+      <p>Je me suis formée au no-code en 2025 et 2026 auprès de <a href="https://contournement.io" target="_blank" rel="noopener">Contournement</a>.</p>
+      <p>Le no-code, c'est du développement par assemblage et paramétrage de briques précodées. Quand on conçoit une application no-code, on s'appuie généralement sur :</p>
+      <ul>
+        <li>Une base de données (typiquement, Airtable) qui va stocker les données</li>
+        <li>Un outil d'automatisation (typiquement, Zapier ou Make) qui va prendre des données quelque part et en faire quelque chose</li>
+        <li>Une interface (typiquement, Softr) qui va permettre de visualiser et d'agir sur les données</li>
+      </ul>
+      <p>Le vibecoding consiste à demander à une IA de développer en fournissant des instructions en langage naturel. Ça a ses limites puisqu'il vaut mieux avoir l'esprit à peu près clair sur ce qu'il est possible de faire. Et on évite de manipuler des données personnelles ou sensibles par ce biais ! Moyennant ce gros caveat, c'est génial pour tester un prototype ou se faire une appli sur un mini besoin.</p>
+      <p><strong>Je peux développer des applications en no-code ou en vibecoding</strong> : recueillir un besoin, schématiser le processus, créer une application, la documenter (tout le monde déteste cette partie, moi j'adore 😄), la tester et la livrer.</p>
+      <p>Mais je suis aussi et surtout désireuse de le faire <em>avec</em> les personnes concernées et de leur transférer tout ou partie de cette chaîne de compétences : devenons tous les maçons de nos propres solutions !</p>
+    `
+  },
+  accompagnement: {
+    title: 'Accompagnement à l\'utilisation de l\'IA pour la rédaction',
+    accroche: 'Accompagner les personnes qui commencent à utiliser l\'IA, c\'est éthique mais aussi malin — pour garder toutes les compétences !',
+    body: `
+      <p>Je m'adresse aux gens de l'écrit qui sont presque toujours des gens intelligents et géniaux, rigoureux et créatifs. Les métiers de l'écrit <em>tels qu'ils existent</em> sont menacés par l'arrivée de l'IA, et de nombreuses personnes sont inquiètes ou désarçonnées de cette nouvelle donne.</p>
+      <p>Accompagner des rédacteurs·rices ou tout autre professionnel·le de l'écrit sur le chemin de la prise en main d'un outil choisi ou construit, pour moi c'est essentiel : ça fait partie d'une vision éthique de la tech, qui ne devrait exclure personne.</p>
+      <p>Ce qui fonctionne dans l'accompagnement : une fois qu'on a réellement compris où se trouvent les attentes, les exigences et le mode de travail, on peut entrer dans le détail, examiner ensemble comment la machine fonctionne, à quoi on peut s'attendre, et ce qu'il va falloir pallier.</p>
+      <p>Quand on amène l'IA dans la rédaction, on déplace la compétence de savoir arranger des phrases claires et belles vers : savoir discerner ce qui est important, mettre de l'ordre, repérer et corriger les incohérences, trouver le compromis entre qualité et efficacité. En réalité, les personnes qui rédigent professionnellement font déjà tout cela.</p>
+      <p>Enfin, on ne sait pas de quoi demain sera fait. Si les ressources viennent à manquer, il n'est pas inenvisageable que les humains récupèrent des missions qui avaient été confiées à l'IA — il vaut donc mieux garder les compétences !</p>
+    `
+  },
+  applis: {
+    title: 'Des applis pédagogiques',
+    accroche: 'Je construis régulièrement des petites applis de maths pour ma fille.',
+    body: `
+      <p>C'est un excellent cas d'usage avec une utilisatrice dont il faut deviner le besoin, une UX qui doit être limpide, des réglages de précision sur la difficulté, sur le feedback. Et avec un coût qui doit être nul ou presque, parce que ça sera utile juste le temps d'acquérir une compétence.</p>
+      <p>Quelques exemples :</p>
+      <div class="modal-imgs-row">
+        <img src="images/projets/maths_multiplications.jpg" alt="Appli multiplications — Le Jardin Gourmand" class="modal-img-mobile">
+        <img src="images/projets/maths_dixneuf.jpg" alt="Appli calcul mental — soustraire 9 ou 19" class="modal-img-mobile">
+        <img src="images/projets/maths_marchande.jpg" alt="Appli la marchande — rendre la monnaie" class="modal-img-mobile">
+      </div>
+      <ul>
+        <li>Pour comprendre le principe de la multiplication</li>
+        <li>Pour soustraire 9 ou 19 (le petit pas magique !)</li>
+        <li>Pour jouer à la marchande (avec une marchande qui se trompe en rendant la monnaie 😄)</li>
+      </ul>
+    `
+  },
+  adherents: {
+    title: 'Gestion des adhérents pour une association',
+    accroche: 'Une appli en no-code permet à une asso de gérer ses adhérents simplement et sans effort. Quelques heures par trimestre gagnées — et une trésorière qui reste plus longtemps !',
+    body: `
+      <p>Le problème : pour un tout petit volume (180 adhérents) et des besoins bien précis (recueil des adhésions par Hello Asso, format de reporting imposé par des plateformes antédiluviennes chez les partenaires), l'association utilisait un outil CRM du marché payant, bien fichu mais overkill et pas suffisamment adaptable.</p>
+      <p>La solution : une table chez Airtable en compte gratuit, une automatisation avec Make, bien optimisée pour entrer aussi dans le plan gratuit. Le tour est joué pour zéro euro.</p>
+      <img src="images/projets/make_efa.png" alt="Schéma de l'automatisation Make pour la gestion des adhérents" class="modal-img">
+      <p>Les limites que je vois : le tarif des outils, toujours susceptible d'être modifié, et la transmission, qui est importante en contexte associatif. J'ai documenté chaque champ et règle à l'intérieur des outils et créé un court mode d'emploi.</p>
+      <p>Le risque est quasi nul puisque les données de départ restent chez Hello Asso et peuvent être récupérées en cas de besoin.</p>
+    `
+  },
+  numerique: {
+    title: 'Numérique responsable',
+    accroche: 'Je me place dans une démarche d\'amélioration continue pour mettre en place et promouvoir une utilisation responsable du numérique.',
+    body: `
+      <p>La consommation d'énergie affolante du secteur du numérique me tarabuste — elle vient heurter tout ce que j'essaie de mettre en place par ailleurs.</p>
+      <p>J'ai décidé de prendre cette question comme partie intégrante de mon activité : j'ai obtenu le <strong>certificat Numérique Responsable de l'INR</strong> pour me mettre des ordres de grandeur en tête et me donner un cadre de réflexion et d'action.</p>
+      <p>Mon premier chantier : le choix d'outils plus vertueux. Pas évident de sortir du tout-Google, mais je me suis dotée d'une plateforme web et mail basée en Europe. Vous me lisez et m'écrivez sur <strong>Infomaniak</strong>, entreprise suisse dont la chaleur générée par les serveurs sert à chauffer un quartier résidentiel.</p>
+      <p>Prochains chantiers : découvrir des outils no-code plus locaux — TimeTonic et SeaTable.</p>
+      <p>Au quotidien, ma réflexion se porte naturellement vers la simplicité. Dans cet esprit, la démarche de développement d'outils numériques permet d'avancer dans la compréhension fine de ce qu'on fait et pourquoi, et de comment le faire mieux, plus rationnellement, plus économiquement.</p>
+      <p>Pour l'utilisation de l'IA en particulier, j'essaie d'appliquer le principe des 6R — mais j'avoue qu'il reste une marge de progression !</p>
+    `
+  }
+};
+
+function openModal(key) {
+  const data = modals[key];
+  document.getElementById('modal-title').textContent = data.title;
+  document.getElementById('modal-accroche').textContent = data.accroche;
+  document.getElementById('modal-body').innerHTML = data.body;
+  document.getElementById('modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Fermer modal en cliquant sur l'overlay
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Fermer avec Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── Navigation par points ──
+const sections = ['hero', 'qui', 'specialites', 'projets', 'contact'];
+const dots = document.querySelectorAll('.nav-dot');
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    document.getElementById(dot.dataset.target).scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = sections.indexOf(entry.target.id);
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.5 });
+
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) observer.observe(el);
+});
+</script>
+</body>
+</html>
